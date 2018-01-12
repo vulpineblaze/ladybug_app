@@ -1,0 +1,38 @@
+#!/bin/sh
+
+# node already installed
+
+
+
+ npm install express --save
+
+
+#run command
+#                     node server.js
+# # or
+#                ./node_modules/.bin/nodemon server.js
+#              sudo  ./node_modules/.bin/nodemon server.js
+
+
+
+
+npm install nodemon --save-dev
+
+
+npm install body-parser --save
+npm install mongodb --save
+npm install ejs --save
+npm install passport --save
+npm install passport-github --save
+npm install passport-google-oauth --save
+
+ npm install express-session --save
+
+npm install input-bubbles
+
+# sudo service apache2 restart
+# sudo service  nginx restart
+# http://stackoverflow.com/questions/5009324/node-js-nginx-what-now
+
+
+ cd /var/www/skygin/ && npm start

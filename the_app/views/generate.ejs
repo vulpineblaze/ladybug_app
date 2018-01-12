@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sacrifice Starship UI</title>
+  <link rel="stylesheet" href="styles.css">
+
+<script type="text/javascript" charset="utf8" src="//code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+
+
+ <meta property="og:url"           content="http://starship_ui.fusionbombsderp.com" />
+  <meta property="og:type"          content="website" />
+  <meta property="og:title"         content="Sacrifice: Starship UI" />
+  <meta property="og:description"   content="The UI for a Starship" />
+  <meta property="og:image"         content="http://starship_ui.fusionbombsderp.com/public/cover_small.jpg" />
+
+</head>
+
+
+<body>
+
+
+
+  <h1>Sacrifice: Starship UI</h1>
+<!-- 
+  <div class="temp_disclaimer">Actual front-end coming SOON(tm).</div>
+<div class="temp_disclaimer">Actual domain name coming SOON(tm). hopeofarilon.fusionbombsderp.com is a temporary home. </div>
+<div class="temp_disclaimer">This is a proof-of-concept to see if anyone is interested before investing more time. </div> -->
+
+
+<div class="temp_disclaimer">Hope Of Arilon: Full Chapters can also be found: <a href="https://www.fictionpress.com/s/3305220/1/Hope-of-Arilon-tk">On FictionPress</a> and <a href="https://www.wattpad.com/story/106472223">On Wattpad</a> </div>
+<div class="temp_disclaimer">Ruleset can be found here: <a href="http://sacrifice.fusionbombsderp.com">sacrifice.wikia.com</a> </div>
+
+
+
+    <div> <a href="/">Home</a> </div>
+<div class="line"></div>
+
+
+  <% if (result.length == 0){ %>
+    <P> Please add a star</P>
+  <% }else{ %>
+
+
+    <% for(var i=0; i<result.length; i++) {%>
+      <div id="<%= result[i].name %>" class="text_container">
+        <p><%= result[i].name %> 
+
+          <% if (result[i].planets.length == 0){ %>
+          <% }else{ %>
+             Planets:
+            <% for(var j=0; j<result[i].planets.length; j++) {%>
+
+              <BR><%= result[i].planets[j] %> 
+            <% } %>
+          <% } %>
+        </p>
+      </div>
+      
+
+    <% } %>
+  <% } %>
+
+
+
+
+<!-- 
+
+<script>
+$('body').find('br').replaceWith("\n");
+$('body').find('p').each(function() {
+
+    $(this).replaceWith("<p>" + $(this).text().replace(/\n/g, '<p>') + "</p>");
+});
+</script>
+
+  <script src="main.js"></script>
+
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-96990320-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+ -->
+
+<div class="temp_disclaimer">2017 (c) All Rights Reserved. </div>
+
+</body>
+</html>

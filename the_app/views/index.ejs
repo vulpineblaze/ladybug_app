@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ladybug</title>
+  <link rel="stylesheet" href="styles.css">
+
+<script type="text/javascript" charset="utf8" src="//code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+
+<link type="text/css" rel="stylesheet" href="bubbles.css">
+ 
+<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
+<script src="input-bubbles.min.js"></script>
+
+
+ <meta property="og:url"           content="http://starship_ui.fusionbombsderp.com" />
+  <meta property="og:type"          content="website" />
+  <meta property="og:title"         content="Sacrifice: Starship UI" />
+  <meta property="og:description"   content="The UI for a Starship" />
+  <meta property="og:image"         content="http://starship_ui.fusionbombsderp.com/public/cover_small.jpg" />
+
+</head>
+
+
+<body>
+
+
+
+  <h1>Ladybug</h1>
+
+  <div class="temp_disclaimer">Actual front-end coming SOON(tm).</div>
+<div class="temp_disclaimer">Actual domain name coming SOON(tm). ladybug.fusionbombsderp.com is a temporary home. </div>
+<div class="temp_disclaimer">This is a proof-of-concept to see if anyone is interested before investing more time. </div>
+
+
+
+
+
+<div class="line"></div>
+
+
+
+<div id="bubbleWrapper"></div>
+ 
+<script>
+    var bubbles = inputBubbles({
+         element: document.getElementById('bubbleWrapper'),   
+         width: 500,
+         height: 30,
+         click: function() {
+            document.getElementById("p1").innerHTML = $('#bubbleWrapper').inputBubbles('values');;
+         }
+     });
+     
+     // Setting after initialization 
+    bubbles.set('allowSpaces', true);
+    // bubbles.trigger('click', bubbles.values);
+    // document.getElementById("p1").innerHTML = bubbles.values;
+</script> 
+
+
+<p id="p1">Hello World!</p>
+
+<%if (auth) { %>
+
+
+
+  <% if (campaigns.length == 0){ %>
+    <P> Please add a campaign</P>
+  <% }else{ %>
+
+
+    <% for(var i=0; i<campaigns.length; i++) {%>
+      <div id="<%= campaigns[i].name %>" class="text_container">
+        <!-- <div class="title"><%= campaigns[i].title %></div>   -->
+        <p><a href="campaign-<%= campaigns[i].guid %>"><%= campaigns[i].name %></a> </p>
+
+
+      </div>
+      
+
+    <% } %>
+  <% } %>
+
+
+
+<div class="logout"><a href="/logout">logout</a>  </div>
+
+
+  <div class="add_container">
+    <h2>Create a campaign</h2>
+
+    <!-- 
+      <h4>
+      User   <input type="text" placeholder="u/user_name/" name="user"><br>
+      Star ID   <input type="text" placeholder="0000:0000:0000:0000" name="id"><br>
+      Current Star Name   <input type="text" placeholder="[HUB-X-00] coolname [stuff]" name="name"><br>
+      Star Class   <input type="text" placeholder="F9pf" name="class"><br>
+      Occupying Race   <input type="text" placeholder="Gek" name="race"><br>
+      What was interesting?   <input type="text" placeholder="Ce, Te, Sp, DynRes, Lush, Diplo" name="tags"></h4> -->
+
+      <div class="add_left_col">
+         <br> 
+        Title  <br>
+        Text
+
+      </div>
+
+
+      <div class="add_right_col">
+
+        <form action="/campaigns" method="POST" >
+          <button type="submit">Submit</button><br>
+            <input type="text" placeholder="c01s01" name="name"><br>
+            <div id="campaign" style="display: none;"><input type="email" name="email" value="<%= auth %>"><br> </div>
+<!--             <textarea name="text" cols="40" rows="5"></textarea>
+ -->        </form>
+
+      </div>
+
+    
+  </div>
+
+
+<% } else { %>
+
+<P>Please sign in:</P>
+
+  <div ><a href="/auth/google">google</a>  </div>
+ <!--  <P> Sorry, only github auth works rn</P>
+  <div ><a href="/auth/github">github</a> </div> -->
+
+<% } %>
+
+
+<!-- 
+
+<script>
+$('body').find('br').replaceWith("\n");
+$('body').find('p').each(function() {
+
+    $(this).replaceWith("<p>" + $(this).text().replace(/\n/g, '<p>') + "</p>");
+});
+</script>
+
+  <script src="main.js"></script>
+
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-96990320-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+ -->
+
+<div class="temp_disclaimer">2017 (c) All Rights Reserved. </div>
+
+</body>
+</html>

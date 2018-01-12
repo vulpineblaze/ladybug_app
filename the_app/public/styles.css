@@ -1,0 +1,125 @@
+html {
+  font-size: 20px;
+}
+
+
+
+.table_container {
+
+   border-radius: 25px;
+    border: 2px solid #555;
+    padding: 10px; 
+    margin: 10px; 
+    width: 95%;
+    
+    text-align: center;
+}
+
+
+.text_container {
+
+   border-radius: 25px;
+    border: 2px solid #555;
+    padding: 0; 
+    margin: 0 auto; 
+    max-width: 850px;
+    
+    text-align: left;
+
+    white-space: pre
+}
+
+.add_container {
+
+   border-radius: 25px;
+    /*border: 2px solid #555;*/
+    padding: 10px; 
+    margin: 10px; 
+    width: 500px;
+}
+/*.add_left_col {
+    background: #e8f6fe;
+    
+    margin-right: 200px;
+}
+.add_right_col {
+	width: 200px;
+    float: right;
+}
+*/
+
+* {
+    box-sizing: border-box;
+}
+
+.add_left_col {
+    width: 30%;
+    float: left;
+    font-size: 21px;
+    font-weight: bold;
+}
+.add_right_col {
+    width: 70%;
+    float: left;
+}
+
+a.delete_href {
+    color: red;
+    text-decoration:none;
+    text-align: center;
+}
+a.delete_href:hover {
+    color: red;
+    font-size:150%;
+}
+
+
+
+.textarea {
+  
+     font-size:12pt;
+     height:640px;
+     width:800px;
+}
+
+p {
+    text-indent: 4%;
+    /*text-align: initial*/
+   white-space: pre-wrap;      /* CSS3 */   
+   white-space: -moz-pre-wrap; /* Firefox */    
+   white-space: -pre-wrap;     /* Opera <7 */   
+   white-space: -o-pre-wrap;   /* Opera 7 */    
+   word-wrap: break-word;      /* IE */
+   padding-left: 3% ;
+   padding-right: 3% ;
+    line-height: 110%;
+    font-size:120%;
+}
+
+.title {
+
+    font-size:150%;
+
+
+}
+
+
+.logout {
+
+
+   padding-top: 3% ;
+   padding-bottom: 3% ;
+   /*margin: 3 0% ;*/
+
+}
+
+.temp_disclaimer{
+
+}
+
+ .line{
+width: 95%;
+height: 5px;
+border-bottom: 1px solid black;
+position: center;
+}

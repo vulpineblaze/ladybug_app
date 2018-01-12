@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sacrifice Starship UI</title>
+  <link rel="stylesheet" href="styles.css">
+<!-- 
+<script type="text/javascript" charset="utf8" src="//code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.css">  
+<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.js"></script>
+
+
+
+
+<script>
+  $(document).ready( function () {
+    $('#table_id').DataTable({
+      searching: true,
+      ordering: true
+    });
+} );
+</script>
+ -->
+
+
+
+ <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawSeriesChart);
+
+    function drawSeriesChart() {
+
+      var data = google.visualization.arrayToDataTable([
+        ['ID', ' ', ' ', 'Region',     ' '],
+        <% if (stars.length == 0){ %>
+        <% }else{ %>
+          <% for(var i=0; i<stars.length; i++) {%>
+            ['<%= stars[i].name %>',<%= stars[i].x %>,<%= stars[i].y %>,'<%= stars[i].region %>',1],
+          <% } %>
+        <% } %>
+        ['Unk',    127,               127,      'Unk',         2]
+      ]);
+
+      var options = {
+        title: 'Star Chart',
+        hAxis: {title: ' '},
+        vAxis: {title: ' '},
+        // backgroundColor: '#999',
+        bubble: {textStyle: {fontSize: 11}}
+      };
+
+      var chart = new google.visualization.BubbleChart(document.getElementById('series_chart_div'));
+      chart.draw(data, options);
+    }
+
+
+
+          // <% if (stars.length == 0){ %>
+          // <% }else{ %>
+          //   <% for(var i=0; i<stars.length; i++) {%>
+          //     [<%= stars[i].x %>,<%= stars[i].y %>,'<%= stars[i].name %>'],
+          //   <% } %>
+          // <% } %>
+          // [ 33,    33, 'Circini'],
+          // [ 127,    127, 'Circini']
+
+
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+
+<body>
+<h1> Campaign Detail Page for: <%= c_name %></h1>
+
+
+
+    <div> <a href="/">Home</a> </div>
+<div class="line"></div>
+
+
+
+
+
+<div id="stars" class="text_container">
+  <% if (stars.length == 0){ %>
+    <P> Please add a star</P>
+  <% }else{ %>
+
+      <div id="series_chart_div" style="width: 700px; height: 700px;"></div>
+
+
+    <% for(var i=0; i<stars.length; i++) {%>
+        <a href="campaign-<%= campaign %>/star-<%= stars[i].guid %>"><%= stars[i].name %> <%= stars[i].region %></a> : <%= stars[i].text %>
+    <% } %>
+  <% } %>
+</div>
+<div id="ships" class="text_container">
+  <% if (ships.length == 0){ %>
+    <P> Please add a ship</P>
+  <% }else{ %>
+
+
+
+    <% for(var i=0; i<ships.length; i++) {%>
+        <a href="campaign-<%= campaign %>/ship-<%= ships[i].guid %>"><%= ships[i].name %></a> : <%= ships[i].text %>
+    <% } %>
+  <% } %>
+</div>
+
+
+
+
+
+
+
+<%if (auth) { %>
+
+
+
+<div class="logout"><a href="/logout">logout</a>  </div>
+
+
+  <div class="add_container">
+    <h2>Create a star</h2>
+      <div class="add_left_col">
+         <br> 
+        Title  <br>
+        Text
+
+      </div>
+
+
+      <div class="add_right_col">
+
+        <form action="/campaign-<%= campaign %>/star" method="POST" >
+          <button type="submit">Submit</button><br>
+
+            <input type="text" placeholder="c01s01" name="name"><br><br>
+            <input type="text" placeholder="centauri" name="region"><br>
+            <input type="number" placeholder="1" name="x"><br>
+            <input type="number" placeholder="1" name="y"><br>
+            <div id="campaign" style="display: none;"><input type="text" value="<%= campaign %>" name="campaign"></div>
+            <textarea name="text" cols="40" rows="5"></textarea>
+        </form>
+
+      </div>
+
+    
+  </div>
+
+<div class="add_container">
+    <h2>Create a ship</h2>
+      <div class="add_left_col">
+         <br> 
+        Title  <br>
+        Text
+
+      </div>
+
+
+      <div class="add_right_col">
+
+        <form action="/campaign-<%= campaign %>/ship" method="POST" >
+          <button type="submit">Submit</button><br>
+
+            <input type="text" placeholder="SS Sacrifice" name="name"><br><br>
+            <div id="campaign" style="display: none;"><input type="text" value="<%= campaign %>" name="campaign">
+            <input type="email" name="email" value="<%= auth %>"><br> </div>
+            <textarea name="text" cols="40" rows="5"></textarea>
+        </form>
+
+      </div>
+
+    
+  </div>
+
+
+
+
+  <div class="add_container">
+    <h2>Edit this campaign</h2>
+      <div class="add_left_col">
+         <br> 
+        Title  <br>
+        Text
+
+      </div>
+
+
+      <div class="add_right_col">
+
+        <form action="/update_campaign-<%= campaign %>" method="POST" >
+          <button type="submit">Submit</button><br>
+
+            <input type="text" value="<%= c_name %>" name="name"><br>
+        </form>
+
+      </div>
+
+    
+  </div>
+
+<div><% for(var i=0; i<emails.length; i++) {%>
+        <div><%= emails[i] %></div>
+    <% } %></div>
+
+
+  <div class="add_container">
+    <h2>add email to campaign</h2>
+      <div class="add_left_col">
+         <br> 
+        Title  <br>
+        Text
+
+      </div>
+
+
+      <div class="add_right_col">
+
+        <form action="/add_email_campaign-<%= campaign %>" method="POST" >
+          <button type="submit">Submit</button><br>
+
+            <input type="email" name="email"><br>
+        </form>
+
+      </div>
+  </div>
+
+
+<% } else { %>
+
+  <P> Please sign in</P>
+
+  <div ><a href="/auth/google">google</a>  </div>
+  <div ><a href="/auth/github">github</a>  </div>
+
+<% } %>
+
+
+
+
+
+<script>
+$('body').find('br').replaceWith("\n");
+$('body').find('p').each(function() {
+
+    $(this).replaceWith("<p>" + $(this).text().replace(/\n/g, '<p>') + "</p>");
+});
+</script>
+
+  <script src="main.js"></script>
+
+
+<!-- 
+
+  <div>
+    <h2>update</h2>
+    <button id="update"> Update </button>
+  </div>
+
+  <script src="main.js"></script> -->
+
+</body>
+</html>
