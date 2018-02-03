@@ -5,7 +5,8 @@
   <title>Ladybug</title>
   <link rel="stylesheet" href="styles.css">
 
-<script type="text/javascript" charset="utf8" src="//code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+<!-- <script type="text/javascript" charset="utf8" src="//code.jquery.com/jquery-3.1.1.slim.min.js"></script> -->
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
 <link type="text/css" rel="stylesheet" href="bubbles.css">
  
@@ -13,11 +14,11 @@
 <script src="input-bubbles.min.js"></script>
 
 
- <meta property="og:url"           content="http://starship_ui.fusionbombsderp.com" />
+ <meta property="og:url"           content="http://ladybug.fusionbombsderp.com" />
   <meta property="og:type"          content="website" />
-  <meta property="og:title"         content="Sacrifice: Starship UI" />
-  <meta property="og:description"   content="The UI for a Starship" />
-  <meta property="og:image"         content="http://starship_ui.fusionbombsderp.com/public/cover_small.jpg" />
+  <meta property="og:title"         content="Ladybug DBT app" />
+  <meta property="og:description"   content="DBT skills app" />
+  <meta property="og:image"         content="http://ladybug.fusionbombsderp.com/public/cover_small.jpg" />
 
 </head>
 
@@ -40,23 +41,6 @@
 
 
 
-<div id="bubbleWrapper"></div>
- 
-<script>
-    var bubbles = inputBubbles({
-         element: document.getElementById('bubbleWrapper'),   
-         width: 500,
-         height: 30,
-         click: function() {
-            document.getElementById("p1").innerHTML = $('#bubbleWrapper').inputBubbles('values');;
-         }
-     });
-     
-     // Setting after initialization 
-    bubbles.set('allowSpaces', true);
-    // bubbles.trigger('click', bubbles.values);
-    // document.getElementById("p1").innerHTML = bubbles.values;
-</script> 
 
 
 <p id="p1">Hello World!</p>
@@ -65,62 +49,15 @@
 
 
 
-  <% if (campaigns.length == 0){ %>
-    <P> Please add a campaign</P>
-  <% }else{ %>
-
-
-    <% for(var i=0; i<campaigns.length; i++) {%>
-      <div id="<%= campaigns[i].name %>" class="text_container">
-        <!-- <div class="title"><%= campaigns[i].title %></div>   -->
-        <p><a href="campaign-<%= campaigns[i].guid %>"><%= campaigns[i].name %></a> </p>
-
-
-      </div>
-      
-
-    <% } %>
-  <% } %>
-
-
+<div id="bubbleWrapper"></div>
 
 <div class="logout"><a href="/logout">logout</a>  </div>
+<div class="skillLink"><a href="/skills">Insert Skills</a>  </div>
 
 
-  <div class="add_container">
-    <h2>Create a campaign</h2>
+<div class="line"></div>
 
-    <!-- 
-      <h4>
-      User   <input type="text" placeholder="u/user_name/" name="user"><br>
-      Star ID   <input type="text" placeholder="0000:0000:0000:0000" name="id"><br>
-      Current Star Name   <input type="text" placeholder="[HUB-X-00] coolname [stuff]" name="name"><br>
-      Star Class   <input type="text" placeholder="F9pf" name="class"><br>
-      Occupying Race   <input type="text" placeholder="Gek" name="race"><br>
-      What was interesting?   <input type="text" placeholder="Ce, Te, Sp, DynRes, Lush, Diplo" name="tags"></h4> -->
-
-      <div class="add_left_col">
-         <br> 
-        Title  <br>
-        Text
-
-      </div>
-
-
-      <div class="add_right_col">
-
-        <form action="/campaigns" method="POST" >
-          <button type="submit">Submit</button><br>
-            <input type="text" placeholder="c01s01" name="name"><br>
-            <div id="campaign" style="display: none;"><input type="email" name="email" value="<%= auth %>"><br> </div>
-<!--             <textarea name="text" cols="40" rows="5"></textarea>
- -->        </form>
-
-      </div>
-
-    
-  </div>
-
+<p id="skills" >skills</p>
 
 <% } else { %>
 
@@ -132,32 +69,226 @@
 
 <% } %>
 
+<form id="frm1" action="/tags"  style="visibility: hidden">
+  First name: <input type="text" name="email" value="<%= auth %>"><br>
+  Last name: <input id="array" input type="text" name="array" value=""><br><br>
+</form>
 
-<!-- 
 
+ 
 <script>
-$('body').find('br').replaceWith("\n");
-$('body').find('p').each(function() {
+    var bubbles = inputBubbles({
+         element: document.getElementById('bubbleWrapper'),   
+         width: 500,
+         height: 30,
+         separator: [',', ':'],
+         click: function() {
+            document.getElementById("p1").innerHTML = $('#bubbleWrapper').inputBubbles('values');
+         }
+     });
+     
+     // Setting after initialization 
+    bubbles.set('allowSpaces', true);
+    bubbles.set('placeholder', true);
 
-    $(this).replaceWith("<p>" + $(this).text().replace(/\n/g, '<p>') + "</p>");
-});
-</script>
+    // bubbles.trigger('click', bubbles.values);
+    // document.getElementById("p1").innerHTML = bubbles.values;
+    bubbles.on('keyup', function(event) {
+        // console.log(event.key);
+        if(event.key == "Enter"){
+          sendLocal();
+        }else if(event.key == ","){
+          sendLocal();
+        }else if(event.key == " "){
+          sendLocal();
+        }
+        // console.log(event.currentTarget);
 
-  <script src="main.js"></script>
+     });
+
+
+      bubbles.on('remove', function(event) {
+          // console.log(event);
+          console.log(Array.from(event.childNodes)[0].innerHTML);
+          removed = Array.from(event.childNodes)[0].innerHTML;
+
+          $.ajax({   
+           type: 'GET',   
+           url: '/remove-<%= auth %>-'+removed,   
+           data: $('#frm1').serialize(),
+
+           success: function(data)
+            {
+              document.getElementById("p1").innerHTML = $('#bubbleWrapper').inputBubbles('values');
+              refreshSkills(document.getElementById("p1").innerHTML.split(","));
+              // console.log("remove");
+              // console.log(data);
+            },
+           timeout: 3000 // sets timeout to 3 seconds 
+        }); 
+          
+
+       });
+    // $('#bubbleWrapper').inputBubbles('addBubble', 'I am a bubble!');
+
+    function sendLocal(){
+      var tags = $('#bubbleWrapper').inputBubbles('values');
+      document.getElementById("p1").innerHTML = tags;
+      var array = document.getElementById("array");
+      var bubbleArray = document.getElementById("p1").innerHTML.split(",");
+      // console.log("bubbleArray:"+bubbleArray[bubbleArray.length-1]);
+      var newTag = bubbleArray[bubbleArray.length-1];
+
+      array.value = newTag; // works on db end
+      // console.log(array);
+      // console.log(array.value);
+      refreshSkills(document.getElementById("p1").innerHTML.split(","));
+
+      sendToDB();
+    }
+    function sendToDB() {
+        // document.getElementById("frm1").submit();
+        $.ajax({   
+           type: 'POST',   
+           url: '/tags',   
+           data: $('#frm1').serialize(),
+           success: function(data)
+            {
+              //callback methods go right here
+              parse_tags_data(data.value.array);
+
+              // console.log(document.getElementById("p1").innerHTML.split(","));
+              
+
+            },
+           timeout: 3000 // sets timeout to 3 seconds 
+        }); 
+    }
+
+    function parse_tags_data(data) {
+        // document.getElementById("frm1").submit();
+          var bubbleArray = document.getElementById("p1").innerHTML.split(",");
+          // console.log(data[0]);
+          // console.log(data[0].array);
+          // var db_array = data.array;
+          var len2 = bubbleArray.length;
+
+          // console.log(bubbleArray);
+          // console.log(data);
+
+          for(i=0;i<data.length;i++){
+            for(j=0;j<len2;j++){
+              if(data[i]==bubbleArray[j]){
+                bubbleArray.splice(j, 1);
+                len2=bubbleArray.length;
+                console.log("found dupe");
+              }
+            }
+          }
+          
+          // console.log(bubbleArray);
+          // console.log(data);
+
+
+          if(bubbleArray.length>1){
+            return bubbleArray;
+          }else if(data.length>1){
+            return data;
+          }else{
+            false
+          }
+    }
+  
+
+  function makeUL(array) {
+
+    // console.log(array);
+    // Create the list element:
+    var list = document.createElement('ul');
+
+        var item = document.createElement('li');
+        item.appendChild(document.createTextNode(array.name));
+        list.appendChild(item);
+
+        var item = document.createElement('li');
+        item.appendChild(document.createTextNode(array.tags));
+        list.appendChild(item);
+
+        var item = document.createElement('li');
+        item.appendChild(document.createTextNode(array.text));
+        list.appendChild(item);
+ 
+
+
+    // Finally, return the constructed list:
+    return list;
+  }
+
+  function refreshSkills(webBubbleArray){
+    console.log("webBubbleArray");
+    console.log(webBubbleArray);
+    $.ajax({   
+      type: 'GET',   
+      url: '/skills-'+webBubbleArray,   
+      success: function(data)
+      {
+        console.log("refreshSkills");
+        console.log(data);
+        myNode = document.getElementById('skills');
+        while (myNode.firstChild) {
+            myNode.removeChild(myNode.firstChild);
+        }
+        for(i=0;i<data.length;i++){
+          myNode.appendChild(makeUL(data[i]));
+        }
+      },
+      timeout: 3000 // sets timeout to 3 seconds 
+    }); 
+  }
+
+// Add the contents of options[0] to #foo:
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log("loaded on load");
+      $.ajax({   
+       type: 'GET',   
+       url: '/tags-<%= auth %>',   
+       data: $('#frm1').serialize(),
+       success: function(data)
+        {
+          var bubbleArray = parse_tags_data(data[0].array);
+          // console.log(bubbleArray);
+          if(bubbleArray.length>1){
+            for(i=0;i<bubbleArray.length;i++){
+              $('#bubbleWrapper').inputBubbles('addBubble', bubbleArray[i]);
+            }
+
+            document.getElementById("p1").innerHTML = $('#bubbleWrapper').inputBubbles('values');
+            refreshSkills(document.getElementById("p1").innerHTML.split(","));
+            // refreshSkills();
+            
+          }// end bubble length
+        },
+       timeout: 3000 // sets timeout to 3 seconds
+        
+    }); 
+    // var bubbles = document.getElementById("p1").innerHTML;
+    // // var bubblesArray = bubbles.split(",");
+    // console.log(bubbles);
+    // console.log(Object.getOwnPropertyNames(bubbles));
+// 
+    // console.log(JSON.stringify($('#bubbleWrapper').inputBubbles('values')))
+    
+        // $('#bubbleWrapper').inputBubbles('addBubble', 'I am a bubble!');
+    }, false);
 
 
 
-  <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-96990320-1', 'auto');
-  ga('send', 'pageview');
 
-</script>
- -->
+
+</script> 
 
 <div class="temp_disclaimer">2017 (c) All Rights Reserved. </div>
 

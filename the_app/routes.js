@@ -21,7 +21,7 @@ module.exports = function(app, passport, db) {
     db.collection('emotes').find().toArray((err, result) => {
       if (err) return console.log(err)
       // console.log(result.length);
-      res.render('index.ejs', {campaigns: result, auth:auth})
+      res.render('index.ejs', {result: result, auth:auth})
     })
   })
 
@@ -241,24 +241,107 @@ module.exports = function(app, passport, db) {
   // })
 
 
+  app.get('/tags-:email', (req, res, next) => {
+    // console.log(req.params.email);
+    db.collection('tags').find({email:req.params.email}).toArray((err, result) => {
+      if (err) return console.log(err)
+      // console.log(result);
+      res.send(result);
+    })
+  })
 
 
 
 
+  app.post('/tags', (req, res) => {
+
+    db.collection('tags').find({email:req.body.email}).toArray((err, result) => {
+      // console.log(result);
+      // console.log(req.body);
+      if(result[0]){
+        db.collection('tags')
+        .findOneAndUpdate({email: req.body.email}, {
+          $push: {
+            array: req.body.array
+          }
+        }, 
+         (err, result) => {
+          if (err) return res.send(err)
+          console.log('updated database')
+          console.log(result);
+          res.send(result);
+        })
+      }else{
+        const id = crypto.randomBytes(16).toString("hex");
+        req.body.guid = id.substring(0,7);
+        var temp = req.body.array;
+        console.log("temp:"+temp);
+        req.body.array = [];
+        req.body.array.push(temp);
+        db.collection('tags').save(req.body, (err, result) => {
+          if (err) return console.log(err)
+          console.log('saved to database')
+          // res.redirect('/')
+          res.send(result);
+        })
+      }
+    })
+  })
+
+  app.get('/remove-:email-:item', (req, res, next) => {
+    // console.log(req.params.email);
+    db.collection("tags").update(
+      { email: req.params.email },
+      { $pull: { 'array': req.params.item } }
+    );
+    res.send("remove");
+  })
 
 
-  // app.post('/campaigns', (req, res) => {
-  //   const id = crypto.randomBytes(16).toString("hex");
-  //   req.body.guid = id.substring(0,7);
-  //   var temp = req.body.email;
-  //   req.body.email = [];
-  //   req.body.email.push(temp);
-  //   db.collection('campaigns').save(req.body, (err, result) => {
-  //     if (err) return console.log(err)
-  //     console.log('saved to database')
-  //     res.redirect('/')
-  //   })
-  // })
+
+  app.get('/skills', (req, res, next) => {
+
+    var auth = checkAuth(req,res,next,db, function (a, user) {
+      console.log("inside,a:"+a+ " user:"+user);
+
+      auth = a;
+    });
+    
+    // console.log("auth:"+auth);
+   
+
+    db.collection('skills').find({email:req.body.email}).toArray((err, result) => {
+      res.render('skills.ejs', {result: result, auth:auth})
+    })
+  })
+
+
+
+
+  app.post('/skills', (req, res) => {
+    const id = crypto.randomBytes(16).toString("hex");
+    req.body.guid = id.substring(0,7);
+    
+
+    db.collection('skills').save(req.body, (err, result) => {
+      if (err) return console.log(err)
+      console.log('saved to database')
+      res.redirect('/skills')
+    })
+  })
+
+
+
+
+  app.get('/skills-:tags', (req, res, next) => {
+    // console.log(req.params.tags);
+    var tags = req.params.tags.split(',');
+    console.log(tags);
+    db.collection('skills').find({tags:{$in: tags}}).toArray((err, result) => {
+      res.send(result);
+    })
+  })
+
 
   // app.post('/campaign-:guid/star', (req, res) => {
   //   const id = crypto.randomBytes(16).toString("hex");

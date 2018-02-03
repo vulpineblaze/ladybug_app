@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>NMS Galaxy Mapper</title>
+  <title>Skills</title>
   <link rel="stylesheet" href="styles.css">
 <!-- 
 <script type="text/javascript" charset="utf8" src="//code.jquery.com/jquery-3.1.1.slim.min.js"></script>
@@ -36,6 +36,7 @@
 <%if (auth) { %>
 
 <div class="logout"><a href="/logout">logout</a>  </div>
+<div class="backLink"><a href="/">Back to Home</a>  </div>
 
 
 
@@ -48,10 +49,11 @@
 
 
   <div class="add_container">
-    <h2>Edit this message</h2>
+    <h2>Create a Skill</h2>
       <div class="add_left_col">
          <br> 
-        Title  <br>
+        Name  <br>
+        Tags  <br>
         Text
 
       </div>
@@ -61,13 +63,10 @@
 
         <form action="/skills" method="POST" >
           <button type="submit">Submit</button><br>
-            <% if (msg.visible) { %> 
-              <input type="checkbox" checked="<%= msg.visible %>" name="visible"><br>
-            <% } else { %>
-              <input type="checkbox"  name="visible"><br>
-            <% } %>
-            <input type="text" value="<%= msg.planet %>" name="planet"><br>
-            <textarea name="text" cols="40" rows="5"><%= msg.text %></textarea>
+
+            <input type="text" name="name"><br>
+            <input type="text" name="tags"><br>
+            <textarea name="text" cols="40" rows="5"></textarea>
         </form>
 
       </div>
@@ -85,7 +84,6 @@
 <% } else { %>
 
   <div ><a href="/auth/google">google</a>  </div>
-  <div ><a href="/auth/github">github</a>  </div>
 
 <% } %>
 
@@ -94,7 +92,7 @@
 
 
 
-
+<!-- 
 
 <script>
 $('body').find('br').replaceWith("\n");
@@ -106,7 +104,7 @@ $('body').find('p').each(function() {
 
   <script src="main.js"></script>
 
-
+ -->
 <!-- 
 
   <div>
