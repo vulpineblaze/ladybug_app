@@ -44,6 +44,7 @@
 
 
 <p id="p1">Hello World!</p>
+<p id="p2">Hello World!</p>
 
 <%if (auth) { %>
 
@@ -51,8 +52,12 @@
 
 <div id="bubbleWrapper"></div>
 
+<div id="clickBubblesBox" class="clickBubblesBox"></div>
+<br>
+
 <div class="logout"><a href="/logout">logout</a>  </div>
 <div class="skillLink"><a href="/skills">Insert Skills</a>  </div>
+<!-- <div class="skillLink"><a href="/skills">Insert Skills</a>  </div> -->
 
 
 <div class="line"></div>
@@ -133,6 +138,8 @@
 
     function sendLocal(){
       var tags = $('#bubbleWrapper').inputBubbles('values');
+      getTaglist();
+      
       document.getElementById("p1").innerHTML = tags;
       var array = document.getElementById("array");
       var bubbleArray = document.getElementById("p1").innerHTML.split(",");
@@ -246,7 +253,70 @@
     }); 
   }
 
+  function getTaglist(){
+    
+    $.ajax({   
+      type: 'GET',   
+      url: '/taglist',   
+      success: function(data)
+      {
+        console.log( "list");
+        console.log( data.length);
+        
+        var list = [];
+        for(i=0;i<data.length;i++){
+          list.push(data[i].tag);
+        }
+        console.log( list);
+        document.getElementById("p2").innerHTML = list;
+        makeDivs(list);
+      },
+      timeout: 3000 // sets timeout to 3 seconds 
+    }); 
+  }
 // Add the contents of options[0] to #foo:
+  function makeDivs(list){
+    mainDiv = document.getElementById("clickBubblesBox");
+    // console.log(list);
+    for(i=0;i<list.length;i++){
+      console.log(i);
+      var id = "clickBubbles"+i;
+      var item = document.createElement('div');
+      item.appendChild(document.createTextNode(list[i]));
+      item.classList.add('clickBubbles');
+      item.id = id;
+
+      // item.onclick = toggleBubbles(item);
+      // item.addEventListener('click', toggleBubbles, false);
+      // item.addEventListener("click", function(){
+      //     toggleBubbles(item.id);
+      // }, false);
+
+      item.addEventListener('click', toggleBubbles, false);
+      function myFunc(evt)
+      {
+        window.alert( evt.target.myParam );
+      }
+      console.log(item);
+
+      mainDiv.appendChild(item);
+    }
+    
+
+  }
+
+  function toggleBubbles(evt){
+    var outItem = document.getElementById(evt.target.id);
+    console.log(outItem);
+
+    var theClass = outItem.className;
+    if(theClass == "clickBubbles"){
+      outItem.className = "clickBubblesOff";
+    }else{
+      outItem.className = "clickBubbles";
+    }
+
+  }
 
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -273,6 +343,8 @@
        timeout: 3000 // sets timeout to 3 seconds
         
     }); 
+      getTaglist();
+
     // var bubbles = document.getElementById("p1").innerHTML;
     // // var bubblesArray = bubbles.split(",");
     // console.log(bubbles);

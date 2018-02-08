@@ -123,3 +123,31 @@ height: 5px;
 border-bottom: 1px solid black;
 position: center;
 }
+
+.clickBubblesBox{
+
+  padding: 0; 
+  margin: 0 auto;
+ 
+}
+
+.clickBubbles{
+  border-radius: 25px;
+  border: 2px solid #555;
+  padding: 10px; 
+  margin: 2px;
+  text-align: center;
+  float:left;
+}
+
+
+.clickBubblesOff{
+  border-radius: 25px;
+  border: 2px solid #555;
+  padding: 10px; 
+  margin: 2px;
+  text-align: center;
+  float:left;
+  background-color: black;
+  color: red;
+}

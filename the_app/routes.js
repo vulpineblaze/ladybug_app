@@ -18,10 +18,10 @@ module.exports = function(app, passport, db) {
 
     var the_date = new Date().toISOString().replace(/T.+/, ' ').replace(/\..+/, '');
     // console.log("the_date:"+the_date);
-    db.collection('emotes').find().toArray((err, result) => {
+    db.collection('taglist').find().toArray((err, taglist) => {
       if (err) return console.log(err)
       // console.log(result.length);
-      res.render('index.ejs', {result: result, auth:auth})
+      res.render('index.ejs', {taglist: taglist, auth:auth})
     })
   })
 
@@ -241,6 +241,9 @@ module.exports = function(app, passport, db) {
   // })
 
 
+  
+
+
   app.get('/tags-:email', (req, res, next) => {
     // console.log(req.params.email);
     db.collection('tags').find({email:req.params.email}).toArray((err, result) => {
@@ -268,14 +271,14 @@ module.exports = function(app, passport, db) {
          (err, result) => {
           if (err) return res.send(err)
           console.log('updated database')
-          console.log(result);
+          // console.log(result);
           res.send(result);
         })
       }else{
         const id = crypto.randomBytes(16).toString("hex");
         req.body.guid = id.substring(0,7);
         var temp = req.body.array;
-        console.log("temp:"+temp);
+        // console.log("temp:"+temp);
         req.body.array = [];
         req.body.array.push(temp);
         db.collection('tags').save(req.body, (err, result) => {
@@ -287,6 +290,70 @@ module.exports = function(app, passport, db) {
       }
     })
   })
+
+
+  // app.post('/taglist', (req, res) => {
+  //     console.log("test");
+
+  //   db.collection('taglist').find({tag:req.body.tag}).toArray((err, result) => {
+  //     console.log(result);
+  //     // console.log(req.body);
+  //     if(result[0]){
+  //         console.log(result);
+  //         res.send(result);
+        
+  //     }else{
+  //       const id = crypto.randomBytes(16).toString("hex");
+  //       req.body.guid = id.substring(0,7);
+        
+  //       db.collection('tags').save(req.body, (err, result) => {
+  //         if (err) return console.log(err)
+  //         console.log('saved to database')
+  //         // res.redirect('/')
+  //         res.send(result);
+  //       })
+  //     }
+  //   })
+  // })
+
+
+
+  app.post('/taglist', (req, res) => {
+    const id = crypto.randomBytes(16).toString("hex");
+    req.body.guid = id.substring(0,7);
+    
+
+    db.collection('taglist').save(req.body, (err, result) => {
+      if (err) return console.log(err)
+      console.log('saved to database')
+      res.redirect('/skills')
+    })
+  })
+
+
+  app.get('/taglist-:tag', (req, res, next) => {
+    // console.log(req.params.email);
+    db.collection('taglist').find({email:req.params.email}).toArray((err, result) => {
+      if (err) return console.log(err)
+      // console.log(result);
+      res.send(result);
+    })
+  })
+
+  app.get('/taglist', (req, res, next) => {
+      // console.log("test");
+    // console.log(req.params.email);
+    db.collection('taglist').aggregate({ $sample: { size: 1 } }).toArray((err, result) => {
+      if (err) return console.log(err)
+      console.log("pulled taglist");
+      console.log(result);
+      res.send(result);
+    })
+  })
+
+
+
+
 
   app.get('/remove-:email-:item', (req, res, next) => {
     // console.log(req.params.email);
