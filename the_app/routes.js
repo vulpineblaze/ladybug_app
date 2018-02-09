@@ -331,19 +331,58 @@ module.exports = function(app, passport, db) {
   })
 
 
-  app.get('/taglist-:tag', (req, res, next) => {
+  app.get('/taglist-:tags', (req, res, next) => {
     // console.log(req.params.email);
-    db.collection('taglist').find({email:req.params.email}).toArray((err, result) => {
-      if (err) return console.log(err)
-      // console.log(result);
-      res.send(result);
-    })
+    // db.collection('taglist').find({email:req.params.email}).toArray((err, result) => {
+    //   if (err) return console.log(err)
+    //   // console.log(result);
+    //   res.send(result);
+    // })
+    var tags = req.params.tags.split(',');
+    if( req.params.tags=="default"){
+      db.collection('taglist').aggregate([{ $sample: { size: 3 } }]).toArray((err, result) => {
+        if (err) return console.log(err)
+          var array = [];
+          for(i=0;i<selected.length;i++){
+              // result.push(selected[i]);
+              array.push(result[i].tag);
+            }
+        console.log("pulled taglist");
+        console.log(array);
+        res.send(array);
+      })
+    }else{
+      db.collection('taglist').find({tags:{$in: tags}}).toArray((err, selected) => {
+        // db.collection('taglist').aggregate([{ $sample: { size: 3 } },{tags:{$in: tags}}]).toArray((err, result) => {
+        if (err) return console.log(err)
+
+          db.collection('taglist').aggregate([{ $sample: { size: 3 } }]).toArray((err, result) => {
+            if (err) return console.log(err)
+            // console.log("pulled result taglist");
+            // console.log(result);
+            for(i=0;i<result.length;i++){
+              // result.push(selected[i]);
+              selected.push(result[i].tag);
+            }
+            console.log("pulled selected taglist");
+            console.log(selected);    
+            res.send(selected);
+          })
+
+        // console.log("pulled selected taglist");
+        // console.log(selected);
+        // res.send(selected);
+      })
+    }
+    // var tags = "Default";
+    
   })
 
   app.get('/taglist', (req, res, next) => {
       // console.log("test");
     // console.log(req.params.email);
-    db.collection('taglist').aggregate({ $sample: { size: 1 } }).toArray((err, result) => {
+    // var tags = req.params.tags.split(',');
+    db.collection('taglist').aggregate([{ $sample: { size: 3 } }]).toArray((err, result) => {
       if (err) return console.log(err)
       console.log("pulled taglist");
       console.log(result);
@@ -388,6 +427,12 @@ module.exports = function(app, passport, db) {
   app.post('/skills', (req, res) => {
     const id = crypto.randomBytes(16).toString("hex");
     req.body.guid = id.substring(0,7);
+    var temp = req.body.tags.split(",");
+        // console.log("temp:"+temp);
+    req.body.tags = [];
+    for(i=0;i<temp.length;i++){
+      req.body.tags.push(temp[i]);
+    }
     
 
     db.collection('skills').save(req.body, (err, result) => {

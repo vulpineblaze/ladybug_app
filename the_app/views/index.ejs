@@ -55,6 +55,8 @@
 <div id="clickBubblesBox" class="clickBubblesBox"></div>
 <br>
 
+<div style="clear: both;"></div>
+
 <div class="logout"><a href="/logout">logout</a>  </div>
 <div class="skillLink"><a href="/skills">Insert Skills</a>  </div>
 <!-- <div class="skillLink"><a href="/skills">Insert Skills</a>  </div> -->
@@ -116,35 +118,58 @@
           // console.log(event);
           console.log(Array.from(event.childNodes)[0].innerHTML);
           removed = Array.from(event.childNodes)[0].innerHTML;
+          removeFromBar(removed);
 
-          $.ajax({   
-           type: 'GET',   
-           url: '/remove-<%= auth %>-'+removed,   
-           data: $('#frm1').serialize(),
-
-           success: function(data)
-            {
-              document.getElementById("p1").innerHTML = $('#bubbleWrapper').inputBubbles('values');
-              refreshSkills(document.getElementById("p1").innerHTML.split(","));
-              // console.log("remove");
-              // console.log(data);
-            },
-           timeout: 3000 // sets timeout to 3 seconds 
-        }); 
           
 
        });
     // $('#bubbleWrapper').inputBubbles('addBubble', 'I am a bubble!');
+    function removeFromBar(removed){
 
-    function sendLocal(){
-      var tags = $('#bubbleWrapper').inputBubbles('values');
-      getTaglist();
-      
-      document.getElementById("p1").innerHTML = tags;
+      $.ajax({   
+       type: 'GET',   
+       url: '/remove-<%= auth %>-'+removed,   
+       data: $('#frm1').serialize(),
+
+       success: function(data)
+        {
+          document.getElementById("p1").innerHTML = $('#bubbleWrapper').inputBubbles('values');
+          // console.log("removeFromBar");
+          // console.log(document.getElementById("p1").innerHTML);
+          // console.log(removed);
+
+          var array = document.getElementById("p1").innerHTML.split(",");
+          var index = array.indexOf(removed);
+          if (index > -1) {
+              array.splice(index, 1);
+          }
+          document.getElementById("p1").innerHTML = array.toString();
+
+          refreshSkills(document.getElementById("p1").innerHTML.split(","));
+          refreshToggle();
+
+          // console.log("remove");
+          // console.log(data);
+        },
+       timeout: 3000 // sets timeout to 3 seconds 
+    }); 
+    }
+
+    function sendLocal(newTag){
+       // getTaglist();
       var array = document.getElementById("array");
-      var bubbleArray = document.getElementById("p1").innerHTML.split(",");
-      // console.log("bubbleArray:"+bubbleArray[bubbleArray.length-1]);
-      var newTag = bubbleArray[bubbleArray.length-1];
+
+      if(newTag){
+        document.getElementById("p1").innerHTML += ","+newTag;
+      }else{
+        var tags = $('#bubbleWrapper').inputBubbles('values');
+        
+        document.getElementById("p1").innerHTML = tags;
+        var bubbleArray = document.getElementById("p1").innerHTML.split(",");
+        // console.log("bubbleArray:"+bubbleArray[bubbleArray.length-1]);
+        var newTag = bubbleArray[bubbleArray.length-1];
+      }
+      
 
       array.value = newTag; // works on db end
       // console.log(array);
@@ -253,23 +278,23 @@
     }); 
   }
 
-  function getTaglist(){
-    
+  function getTaglist(tags){
+    if(tags){
+
+    }else{
+      tags=["default"];
+    }
     $.ajax({   
       type: 'GET',   
-      url: '/taglist',   
+      url: '/taglist-'+tags,   
       success: function(data)
       {
-        console.log( "list");
-        console.log( data.length);
-        
-        var list = [];
-        for(i=0;i<data.length;i++){
-          list.push(data[i].tag);
-        }
-        console.log( list);
-        document.getElementById("p2").innerHTML = list;
-        makeDivs(list);
+        console.log( "data");
+        console.log( data);
+        document.getElementById("p2").innerHTML = data;
+        makeDivs(data);
+        refreshToggle();
+
       },
       timeout: 3000 // sets timeout to 3 seconds 
     }); 
@@ -278,12 +303,17 @@
   function makeDivs(list){
     mainDiv = document.getElementById("clickBubblesBox");
     // console.log(list);
+    // var mainDiv = document.getElementById("foo");
+    while (mainDiv.firstChild) {
+        mainDiv.removeChild(mainDiv.firstChild);
+    }
+
     for(i=0;i<list.length;i++){
       console.log(i);
       var id = "clickBubbles"+i;
       var item = document.createElement('div');
       item.appendChild(document.createTextNode(list[i]));
-      item.classList.add('clickBubbles');
+      item.classList.add('clickBubblesUnSelected');
       item.id = id;
 
       // item.onclick = toggleBubbles(item);
@@ -308,12 +338,32 @@
   function toggleBubbles(evt){
     var outItem = document.getElementById(evt.target.id);
     console.log(outItem);
-
+    toggleDirect(outItem);
+  }
+  function toggleDirect(outItem){
     var theClass = outItem.className;
-    if(theClass == "clickBubbles"){
-      outItem.className = "clickBubblesOff";
+    if(theClass == "clickBubblesUnSelected"){
+      outItem.className = "clickBubblesSelected";
+      sendLocal(outItem.innerHTML);
     }else{
-      outItem.className = "clickBubbles";
+      outItem.className = "clickBubblesUnSelected";
+      removeFromBar(outItem.innerHTML);
+    }
+  }
+  function refreshToggle(){
+    var list = document.getElementById("p1").innerHTML.split(",");
+    mainDiv = document.getElementById("clickBubblesBox");
+
+    var children = mainDiv.children;
+    for (var i = 0; i < children.length; i++) {
+      var tableChild = children[i];
+      for(j=0;j<list.length;j++){
+        if(tableChild.innerHTML==list[j]){
+          tableChild.className = "clickBubblesSelected";
+          console.log("tableChild");
+          console.log(tableChild);
+        }
+      }
     }
 
   }
@@ -336,6 +386,8 @@
 
             document.getElementById("p1").innerHTML = $('#bubbleWrapper').inputBubbles('values');
             refreshSkills(document.getElementById("p1").innerHTML.split(","));
+            getTaglist(bubbleArray);
+
             // refreshSkills();
             
           }// end bubble length
@@ -343,7 +395,6 @@
        timeout: 3000 // sets timeout to 3 seconds
         
     }); 
-      getTaglist();
 
     // var bubbles = document.getElementById("p1").innerHTML;
     // // var bubblesArray = bubbles.split(",");

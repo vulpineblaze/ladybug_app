@@ -131,7 +131,7 @@ position: center;
  
 }
 
-.clickBubbles{
+.clickBubblesUnSelected{
   border-radius: 25px;
   border: 2px solid #555;
   padding: 10px; 
@@ -141,7 +141,7 @@ position: center;
 }
 
 
-.clickBubblesOff{
+.clickBubblesSelected{
   border-radius: 25px;
   border: 2px solid #555;
   padding: 10px; 
