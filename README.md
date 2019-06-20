@@ -1,8 +1,7 @@
 # ladybug_app
-DBT skills app
 
 # Project Name
-> Here goes your awesome project description!
+> DBT skills app using tag based RESTful API
 
 ## Table of contents
 * [General info](#general-info)
@@ -18,47 +17,50 @@ DBT skills app
 
 ## General info
 Add more general information about project. What the purpose of the project is? Motivation?
-Put possible docs / coda link here.
+
+[Project doc on coda.io](https://coda.io/d/Master-Project-List-FBD_ddKUgkxSKaN/Ladybug_su6qz#_luz0U)
+
+[Hosted here](http://ladybug.fusionbombsderp.com/)
 
 ## Screenshots
-![Example screenshot](./img/screenshot.png)
+*None yet*
 
 ## Technologies
-* Tech 1 - version 1.0
-* Tech 2 - version 2.0
-* Tech 3 - version 3.0
+* Node.js - version 7.6.0
+* Express.js - version 4.16.2
+* ejs - version 2.5.7
+* nginx - version 1.2.1-2.2+wheezy4
+* mongodb - version 2.2.34
+* passport - version 0.3.2
 
 ## Setup
-Describe how to install / setup your local environement / add link to demo version.
+Located in [setup instructions](./setup_instructions).
+
+Alter the parameters in `package.json` to fit.
 
 ### Requirements
-If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+Included in the setup instructions.
 
 ### Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+Once installed, use `npm start` .
 
 ## Code Examples
-Show examples of usage:
-`put-your-code-here`
+All feature are found on the web app.
 
 ## Features
 List of features ready and TODOs for future development
-* Awesome feature 1
-* Awesome feature 2
-* Awesome feature 3
+* Takes in user desired tags
+* Returns corresponding DBT skills (or other article type)
 
 To-do list:
-* Wow improvement to be done 1
-* Wow improvement to be done 2
+* Project doc redesign
+* Code overhaul
 
 ## Status
-Project is: _in progress_, _finished_, _no longer continue_ and why?
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+Project is: _in progress_, awaiting completeion of higher priority tasks.
 
 ## Inspiration
-Add here credits. Project inspired by..., based on...
+My Wife asked if it was possible to emulate the tag based system of last.fm, but for DBT skills and articles. 
 
 ## Contact
 Created by [@vulpineblaze](https://github.com/vulpineblaze) - feel free to contact me!
