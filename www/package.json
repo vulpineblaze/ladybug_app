@@ -1,0 +1,34 @@
+{
+  "name": "ladybug",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha tests.js 2>&1 | tee tests.txt",
+    "start": "sudo ./node_modules/.bin/nodemon server.js 2>&1 | tee log.txt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/vulpineblaze/ladybug_app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vulpineblaze/ladybug_app/issues"
+  },
+  "homepage": "https://github.com/vulpineblaze/ladybug_app#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "chromedriver": "^75.0.0",
+    "ejs": "^2.6.2",
+    "express": "^4.17.1",
+    "express-session": "^1.16.2",
+    "mocha": "^6.1.4",
+    "mongodb": "^3.2.7",
+    "passport": "^0.4.0",
+    "passport-github": "^1.1.0",
+    "passport-google": "^0.3.0",
+    "passport-google-oauth": "^2.0.0",
+    "selenium-webdriver": "^4.0.0-alpha.3"
+  }
+}

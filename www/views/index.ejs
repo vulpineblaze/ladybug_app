@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ladybug</title>
+  <link rel="stylesheet" href="styles.css">
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+
+
+
+ <meta property="og:url"           content="http://ladybug.fusionbombsderp.com" />
+  <meta property="og:type"          content="website" />
+  <meta property="og:title"         content="Ladybug DBT app" />
+  <meta property="og:description"   content="DBT skills app" />
+  <meta property="og:image"         content="http://ladybug.fusionbombsderp.com/public/cover_small.jpg" />
+
+</head>
+
+
+<body>
+
+
+
+  <h1>Ladybug</h1>
+
+
+
+<p><%= hello %></p>
+
+
+<div class="line"></div>
+
+<%if (auth) { %>
+
+
+
+<p>Logged In!</p>
+<div class="logout"><a href="/logout">logout</a>  </div>
+
+
+<% } else { %>
+
+<P>Please sign in:</P>
+
+  <div ><a href="/auth/google">google</a>  </div>
+
+<% } %>
+
+
+<div class="temp_disclaimer">(c) All Rights Reserved. </div>
+
+</body>
+</html>
