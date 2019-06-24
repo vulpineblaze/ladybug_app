@@ -9,7 +9,6 @@ const passport = require("passport");
 var the_port = 3004;
 // var the_port = 80;
 
-var db
 var configDB = require('./config/database.js');
 var root_dir = "http://ladybug.fusionbombsderp.com";
 
@@ -28,9 +27,11 @@ app.use(express.static('public'))
 
  
 
-MongoClient.connect(configDB.url, (err, database) => {
+MongoClient.connect(configDB.url, (err, client) => {
+	// ladybug
   if (err) return console.log(err)
-  db = database
+  var db = client.db('ladybug');
+
   require('./routes.js')(app, passport, db); // load our routes and pass in our app and fully configured passport
 
   app.listen(process.env.PORT || the_port, "127.0.0.1", () => {

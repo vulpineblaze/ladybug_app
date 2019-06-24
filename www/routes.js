@@ -1,3 +1,4 @@
+const tagparser = require('./src/tagparser.js');
 
 
 module.exports = function(app, passport, db) {
@@ -13,7 +14,60 @@ module.exports = function(app, passport, db) {
 
  
 
+  app.post('/partial', (req, res) => {
 
+    db.collection('taglist').find({tag:req.body.partial}).toArray((err, taglist) => {
+      if (err) return console.log(err)
+      // console.log(result.length);
+      // res.render('index.ejs', {taglist: taglist, auth:auth})
+      res.send(taglist);
+    });
+
+  })
+
+
+  app.post('/tag', (req, res) => {
+
+    var result = tagparser.findPartial(db, req.body.tag);
+    res.send(result);
+
+
+    // db.collection('taglist').find({tag:req.body.tag}).toArray((err, result) => {
+    //   // console.log(result);
+    //   // console.log(req.body);
+    //   if(result[0]){
+    //     db.collection('tags')
+    //     .findOneAndUpdate({email: req.body.email}, {
+    //       $push: {
+    //         array: req.body.array
+    //       }
+    //     }, 
+    //      (err, result) => {
+    //       if (err) return res.send(err)
+    //       console.log('updated database')
+    //       // console.log(result);
+    //       res.send(result);
+    //     })
+    //   }else{
+    //     const id = crypto.randomBytes(16).toString("hex");
+    //     req.body.guid = id.substring(0,7);
+    //     var temp = req.body.array;
+    //     // console.log("temp:"+temp);
+    //     req.body.array = [];
+    //     req.body.array.push(temp);
+    //     db.collection('tags').save(req.body, (err, result) => {
+    //       if (err) return console.log(err)
+    //       console.log('saved to database')
+    //       // res.redirect('/')
+    //       res.send(result);
+    //     })
+    //   }
+    // })
+  })
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
   app.get('/logout', function(req, res){
     console.log('logging out');
